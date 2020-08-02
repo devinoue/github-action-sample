@@ -1,8 +1,22 @@
-name: Hello, World!
-on: push
+name: Deploy to LIGHTSAIL
+on:
+  push:
+    branches: [ master ]
+
 jobs:
-    build:
-        name: Greeting
-        runs-on: ubuntu-latest
-        steps:
-            - run: echo "Hello, World!"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: test
+    # 保存したシークレットたちを環境変数に設定
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
+      LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
+      run: 
+        # 秘密鍵にファイル名secret_keyをつける
+        echo "$SECRET_KEY" > secret_key
+        # パーミッションの変更    
+        chmod 600 secret_key
+        # ssh接続　＞　デプロイするディレクトリに行く　＞　デプロイ
+        ssh -oStrictHostKeyChecking=no ${LIGHTSAIL_USER}@${LIGHTSAIL_HOST} -i secret_key "cd ~/test && git pull origin master"
