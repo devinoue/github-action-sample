@@ -13,7 +13,7 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
       LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
-      run: 
+      run: |
         # 秘密鍵にファイル名secret_keyをつける
         echo "$SECRET_KEY" > secret_key
         # パーミッションの変更    
